@@ -6,7 +6,6 @@ import bgu.spl171.net.api.bidi.Packets.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-
 //TODO: case 3;
 
 public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
