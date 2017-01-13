@@ -15,7 +15,14 @@ public class BCAST implements Packet{
         opcode=9;
         deletedOrAdded=-1;
         fileName="";
-        lastByte=-1;
+        lastByte=0;
+    }
+
+    public BCAST(byte deletedOrAdded){
+        opcode=9;
+        this.deletedOrAdded=deletedOrAdded;
+        fileName="";
+        lastByte=0;
     }
 
     public short getOpcode() {
@@ -39,13 +46,6 @@ public class BCAST implements Packet{
         this.fileName = fileName;
     }
 
-    public byte getLastByte() {
-        return lastByte;
-    }
-
-    public void setLastByte(byte lastByte) {
-        this.lastByte = lastByte;
-    }
 
     public void execute(BidiMessagingProtocolPacket p){
         p.execute(this);

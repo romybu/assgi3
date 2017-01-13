@@ -11,12 +11,17 @@ public class ERROR implements Packet {
     String errMsg;
     byte lastByte;
 
-
+    public ERROR(short errorCode, String msg){
+        opcode=5;
+        this.errorCode=errorCode;
+        errMsg=msg;
+        lastByte=0;
+    }
     public ERROR(){
         opcode=5;
         errorCode=-1;
         errMsg="";
-        lastByte=-1;
+        lastByte=0;
     }
 
     public short getOpcode() {
@@ -42,10 +47,6 @@ public class ERROR implements Packet {
 
     public byte getLastByte() {
         return lastByte;
-    }
-
-    public void setLastByte(byte lastByte) {
-        this.lastByte = lastByte;
     }
 
     public void execute(BidiMessagingProtocolPacket p){

@@ -14,6 +14,11 @@ public class ACK implements Packet{
         blockNumber=-1;
     }
 
+    public ACK(short blockNumber){
+        opcode=4;
+        this.blockNumber=blockNumber;
+    }
+
     public short getOpcode() {
         return opcode;
     }

@@ -18,6 +18,12 @@ public class DATA implements Packet {
         data=new byte[packetSize];
     }
 
+    public DATA(short packetSize,byte[] data,short blockNumber ){
+        opcode=3;
+        this.packetSize=packetSize;
+        this.blockNumber=blockNumber;
+        this.data=data;
+    }
     @Override
     public short getOpcode() {
         return opcode;

@@ -5,6 +5,7 @@ import bgu.spl171.net.api.bidi.Connections;
 import bgu.spl171.net.api.bidi.Packets.Packet;
 import bgu.spl171.net.srv.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,10 +35,15 @@ public class ConnectionsImpl<T> implements Connections<T> {
     }
 
     public void disconnect(int connectionId){
-        allConnections.remove(connectionId);
+        try {
+            allConnections.remove(connectionId).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addToConnections(ConnectionHandler<T> connectionHandler){
         allConnections.put(numOfConnections.get(), connectionHandler);
+
     }
 }
