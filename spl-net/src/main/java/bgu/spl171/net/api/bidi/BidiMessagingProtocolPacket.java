@@ -7,6 +7,7 @@ import bgu.spl171.net.srv.bidi.ConnectionsImpl;
 import javax.imageio.IIOException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,10 +50,35 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     }
 
     public void execute(DELRQ msg) {
+        try {
+            boolean isDeleted =Files.deleteIfExists(Paths.get("Files", "ReadyFiles", msg.getString()));
+            if (!isDeleted){
+                boolean isSent = connections.send(connectionId, new ERROR((short) 1, "File not found – RRQ of non-existing file"));
+                if (!isSent) {
+                    System.out.println("the Msg did'nt send");
+                }
+            }
+            else{
+                broadcast(new BCAST((byte)0));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void execute(DIRO msg) {
-        data=Files.ge
+        File folder=new File("Files/ReadyFiles");
+        String [] allFiles= folder.list();
+
+    }
+
+    private static byte[] convertToBytes(String[] strings) {
+        byte[][] data = new byte[strings.length][];
+        for (int i = 0; i < strings.length; i++) {
+            String string = strings[i];
+            data[i] = string.getBytes(); // TODO:check if its UTF8
+        }
+        return data;
     }
 
     public void execute(DISC msg) {
