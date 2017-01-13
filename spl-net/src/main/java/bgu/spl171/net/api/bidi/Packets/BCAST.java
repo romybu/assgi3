@@ -1,5 +1,7 @@
 package bgu.spl171.net.api.bidi.Packets;
 
+import bgu.spl171.net.api.bidi.BidiMessagingProtocolPacket;
+
 /**
  * Created by alonam on 1/11/17.
  */
@@ -43,5 +45,9 @@ public class BCAST implements Packet{
 
     public void setLastByte(byte lastByte) {
         this.lastByte = lastByte;
+    }
+
+    public void execute(BidiMessagingProtocolPacket p){
+        p.execute(this);
     }
 }

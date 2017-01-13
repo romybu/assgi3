@@ -1,5 +1,7 @@
 package bgu.spl171.net.api.bidi.Packets;
 
+import bgu.spl171.net.api.bidi.BidiMessagingProtocolPacket;
+
 /**
  * Created by romybu on 11/01/17.
  */
@@ -24,5 +26,8 @@ public abstract class PacketsWithString implements Packet {
     }
 
     public abstract short getOpcode();
+
+    public abstract void execute(BidiMessagingProtocolPacket p);
+
 
 }
