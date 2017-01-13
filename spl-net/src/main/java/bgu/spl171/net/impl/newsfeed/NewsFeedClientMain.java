@@ -6,7 +6,7 @@ public class NewsFeedClientMain {
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
-            args = new String[]{"127.0.0.1"};
+            args = new String[]{"0.0.0.0"};
         }
 
 //        System.out.println("running clients");

@@ -37,10 +37,11 @@ public class Reactor<T> implements Server<T> {
 
     @Override
     public void serve() {
-	selectorThread = Thread.currentThread();
+
         try (Selector selector = Selector.open();
                 ServerSocketChannel serverSock = ServerSocketChannel.open()) {
 
+            selectorThread=Thread.currentThread();
             this.selector = selector; //just to be able to close
 
             serverSock.bind(new InetSocketAddress(port));
@@ -64,7 +65,6 @@ public class Reactor<T> implements Server<T> {
                 }
 
                 selector.selectedKeys().clear(); //clear the selected keys set so that we can know about new events
-
             }
 
         } catch (ClosedSelectorException ex) {
@@ -99,22 +99,21 @@ public class Reactor<T> implements Server<T> {
                 protocolFactory.get(),
                 clientChan,
                 this);
+
         clientChan.register(selector, SelectionKey.OP_READ, handler);
     }
 
     private void handleReadWrite(SelectionKey key) {
         NonBlockingConnectionHandler handler = (NonBlockingConnectionHandler) key.attachment();
-
         if (key.isReadable()) {
             Runnable task = handler.continueRead();
             if (task != null) {
                 pool.submit(handler, task);
             }
-        }
-
-	    if (key.isValid() && key.isWritable()) {
+        } if (key.isWritable())
             handler.continueWrite();
-        }
+
+
     }
 
     private void runSelectionThreadTasks() {
