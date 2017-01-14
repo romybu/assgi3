@@ -59,7 +59,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                 }
             }
             else{
-                broadcast(new BCAST((byte)0));
+                broadcast(new BCAST((byte)0,msg.getString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -190,7 +190,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                 }
             }
             else {
-                try {
+                try{
                     Files.write(path,currentData, StandardOpenOption.APPEND);
                     connections.send(connectionId, new ACK(msg.getBlockNumber()));
                 } catch (IOException e) {
@@ -222,12 +222,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
         }
     }
 
-
-
-    public void execute(ERROR msg) {//NOTHING
+    public void execute(ERROR msg){
+        connections.send(connectionId,msg);
     }
-
-    public void execute(BCAST msg) {//NOTHING
-    }
-
 }
