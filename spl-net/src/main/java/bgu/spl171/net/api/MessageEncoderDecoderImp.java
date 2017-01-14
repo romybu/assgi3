@@ -5,6 +5,7 @@ import bgu.spl171.net.api.bidi.Packets.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 
 //TODO: case 3;
 
@@ -17,6 +18,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     Packet toReturn;
     private byte[] bytes = new byte[1 << 10]; //start with 1k
     private int len = 0;
+    private AtomicInteger loaded=new AtomicInteger();
 
 
     public Packet decodeNextByte(byte nextByte){
@@ -38,6 +40,9 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
                 }
                 case 2:{
                     return buildWRQ(nextByte);
+                }
+                case 3:{
+                    return buildDATA(nextByte);
                 }
                 case 4:{
                     return buildACK(nextByte);
@@ -74,6 +79,15 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
             case 2:{
                 return  createBytesArrayWithString((PacketsWithString)message);
             }
+            case 3:{
+                byte[] tmp=shortToBytes((message).getOpcode());
+                byte[] tmp2=shortToBytes(((DATA)message).getPacketSize());
+                byte[] midAns= mergeArrays(tmp, tmp2);
+                byte[] tmp3=shortToBytes(((DATA)message).getBlockNumber());
+                byte[] midAns2= mergeArrays(midAns, tmp3);
+
+                return mergeArrays(midAns2, ((DATA)message).getData());
+            }
             case 4:{
                 byte[] tmp=shortToBytes((message).getOpcode());
                 byte[] tmp2=shortToBytes(((ACK)message).getBlockNumber());
@@ -109,7 +123,40 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         return null;
     }
 
+    private Packet buildDATA(byte nextByte) {
+        if (!isStarted) {
+            toReturn = new DATA();
+            isStarted=true;
+            counter=10;
+        }
+        if(counter<12){
+            start[counter-10]=nextByte;
+            counter++;
+        }
+        if (counter==12){
+            ((DATA)toReturn).setPacketSize(bytesToShort(start));
+            ((DATA)toReturn).initDataArray(((DATA) toReturn).getPacketSize());
+            counter++;
+            return null;
+        }
+        if(counter<14){
+            start[counter-12]=nextByte;
+            counter++;
+        }
+        if(counter==14){
+            ((DATA)toReturn).setBlockNumber(bytesToShort(start));
+            counter++;
+            return null;
+        }
+        if (counter>14 && loaded.get()<((DATA)toReturn).getPacketSize()){
+            ((DATA)toReturn).addToData(nextByte);
+            loaded.incrementAndGet();
+        }
+        if (counter>14 && loaded.get()==((DATA)toReturn).getPacketSize())
+            return toReturn;
 
+        return null;
+    }
 
     private Packet buildRRQ(byte nextByte) {
         if (!isStarted) {
@@ -249,8 +296,6 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         byte[] tmp2=(p.getString() + "0").getBytes();
        return  mergeArrays(tmp, tmp2);
     }
-
-
 
     public short bytesToShort(byte[] byteArr)
     {
