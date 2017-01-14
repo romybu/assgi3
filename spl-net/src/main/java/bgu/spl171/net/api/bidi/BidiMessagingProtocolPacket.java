@@ -59,7 +59,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                 }
             }
             else{
-                broadcast(new BCAST((byte)0));
+                broadcast(new BCAST((byte)0, msg.getString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -207,7 +207,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                     e.printStackTrace();
                     return;
                 }
-                broadcast(new BCAST((byte)1, fileName)); //TODO: what does this send?
+                broadcast(new BCAST((byte)1, fileName));
                 path=null;
             }
         }
@@ -224,7 +224,8 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
 
 
 
-    public void execute(ERROR msg) {//NOTHING
+    public void execute(ERROR msg) {//In this case, we want to SEND an error to the client
+        connections.send(connectionId, msg);
     }
 
     public void execute(BCAST msg) {//NOTHING

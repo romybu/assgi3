@@ -56,9 +56,9 @@ public class DATA implements Packet {
         return data;
     }
 
-    public void setData(byte[] data) {
-        this.data = data;
-    }
+//    public void setData(byte[] data) {
+//        this.data = data;
+//    }
 
     public void initDataArray(short size){ data=new byte[size]; }
 
