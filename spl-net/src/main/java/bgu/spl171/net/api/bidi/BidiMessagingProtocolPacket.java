@@ -208,7 +208,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                     return;
                 }
                 path=null;
-                broadcast(new BCAST((byte)1));
+                broadcast(new BCAST((byte)1)); //TODO: what does this send?
             }
         }
     }
