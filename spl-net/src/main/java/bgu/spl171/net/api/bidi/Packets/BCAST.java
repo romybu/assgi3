@@ -18,7 +18,7 @@ public class BCAST implements Packet{
         lastByte=0;
     }
 
-    public BCAST(byte deletedOrAdded){
+    public BCAST(byte deletedOrAdded){//TODO: should add filename and a message "... was added/del"??
         opcode=9;
         this.deletedOrAdded=deletedOrAdded;
         fileName="";
