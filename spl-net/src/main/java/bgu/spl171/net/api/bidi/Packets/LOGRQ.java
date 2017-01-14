@@ -5,7 +5,7 @@ import bgu.spl171.net.api.bidi.BidiMessagingProtocolPacket;
 /**
  * Created by romybu on 11/01/17.
  */
-public class LOGRQ extends PacketsWithString {
+public class LOGRQ extends PacketsWithString { //TODO: MAYBE WE SHOULD KNOW THE USERNAME?
     private short opcode;
 
     public LOGRQ(){

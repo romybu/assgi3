@@ -31,6 +31,8 @@ public class DATA implements Packet {
         this.blockNumber=blockNumber;
         this.data=data;
     }
+
+
     @Override
     public short getOpcode() {
         return opcode;

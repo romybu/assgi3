@@ -207,8 +207,8 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                     e.printStackTrace();
                     return;
                 }
+                broadcast(new BCAST((byte)1, fileName)); //TODO: what does this send?
                 path=null;
-                broadcast(new BCAST((byte)1)); //TODO: what does this send?
             }
         }
     }

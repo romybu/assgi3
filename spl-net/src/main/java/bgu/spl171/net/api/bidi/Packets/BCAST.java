@@ -25,6 +25,13 @@ public class BCAST implements Packet{
         lastByte=0;
     }
 
+    public BCAST(byte deletedOrAdded, String str){//TODO: should add filename and a message "... was added/del"??
+        opcode=9;
+        this.deletedOrAdded=deletedOrAdded;
+        fileName=str;
+        lastByte=0;
+    }
+
     public short getOpcode() {
         return opcode;
     }
