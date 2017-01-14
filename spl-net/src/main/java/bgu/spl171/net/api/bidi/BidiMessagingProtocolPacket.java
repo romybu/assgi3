@@ -69,16 +69,17 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     public void execute(DIRO msg) {
         File folder=new File("Files/ReadyFiles");
         String [] allFiles= folder.list();
-
-    }
-
-    private static byte[] convertToBytes(String[] strings) {
-        byte[][] data = new byte[strings.length][];
-        for (int i = 0; i < strings.length; i++) {
-            String string = strings[i];
-            data[i] = string.getBytes(); // TODO:check if its UTF8
+        data= new byte[allFiles.length];
+        int i=0;
+        while (i<data.length){
+            byte[] temp=allFiles[i].getBytes();
+            for(int j=0; j<temp.length & i<data.length;j++){
+                data[i]=temp[j];
+                i++;
+            }
         }
-        return data;
+        hadleWithReading();
+
     }
 
     public void execute(DISC msg) {

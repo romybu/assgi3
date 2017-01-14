@@ -29,6 +29,9 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
             counter++;
         }
         if (opcode!=-1){
+            if (opcode<1 || opcode>10){
+                return new ERROR((short)4, "Illegal TFTP operation – Unknown Opcode");
+            }
             switch (opcode){
                 case 1:{
                     return buildRRQ(nextByte);
