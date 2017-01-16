@@ -153,7 +153,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
             counterOfBlocks++;
             boolean isSent = connections.send(connectionId, new DATA((short)currentSend.length, currentSend,counterOfBlocks));
             if (!isSent) {
-                System.out.println("the Msg did'nt send");
+                System.out.println("the Msg did'nt send");//TODO: send error
             }
             else{
                 counterOfBlocks=0;
@@ -169,7 +169,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
             counterOfBlocks++;
             boolean isSent = connections.send(connectionId, new DATA((short)currentSend.length, currentSend,counterOfBlocks));
             if (!isSent) {
-                System.out.println("the Msg did'nt send");
+                System.out.println("the Msg did'nt send");//TODO: make this an error message
             }
         }
     }
@@ -207,7 +207,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                     e.printStackTrace();
                     return;
                 }
-                broadcast(new BCAST((byte)1, fileName)); //TODO: what does this send?
+                broadcast(new BCAST((byte)1, fileName));
                 path=null;
             }
         }

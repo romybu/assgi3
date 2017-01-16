@@ -18,12 +18,12 @@ public class BCAST implements Packet{
         lastByte=0;
     }
 
-    public BCAST(byte deletedOrAdded){
-        opcode=9;
-        this.deletedOrAdded=deletedOrAdded;
-        fileName="";
-        lastByte=0;
-    }
+//    public BCAST(byte deletedOrAdded){
+//        opcode=9;
+//        this.deletedOrAdded=deletedOrAdded;
+//        fileName="";
+//        lastByte=0;
+//    }
 
     public BCAST(byte deletedOrAdded, String str){
         opcode=9;
