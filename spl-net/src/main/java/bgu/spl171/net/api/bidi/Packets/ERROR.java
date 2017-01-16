@@ -6,10 +6,10 @@ import bgu.spl171.net.api.bidi.BidiMessagingProtocolPacket;
  * Created by alonam on 1/11/17.
  */
 public class ERROR implements Packet {
-    short opcode;
-    short errorCode;
-    String errMsg;
-    byte lastByte;
+    private short opcode;
+    private short errorCode;
+    private String errMsg;
+    private byte lastByte;
 
     public ERROR(short errorCode, String msg){
         opcode=5;
@@ -43,10 +43,6 @@ public class ERROR implements Packet {
 
     public void setErrMsg(String errMsg) {
         this.errMsg = errMsg;
-    }
-
-    public byte getLastByte() {
-        return lastByte;
     }
 
     public void execute(BidiMessagingProtocolPacket p){

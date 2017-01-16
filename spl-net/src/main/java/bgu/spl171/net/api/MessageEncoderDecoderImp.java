@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     private int counter=0;
-    //private int countAck=0;
     byte[] start= new byte[2];
     short opcode=-1;
     boolean isStarted=false;
@@ -151,9 +150,10 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
             ((DATA)toReturn).addToData(nextByte);
             loaded.incrementAndGet();
         }
-        if (counter>14 && loaded.get()==((DATA)toReturn).getPacketSize())
+        if (counter>14 && loaded.get()==((DATA)toReturn).getPacketSize()) {
+            upDateValues();
             return toReturn;
-
+        }
         return null;
     }
 
@@ -165,6 +165,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
 
         if (nextByte == 0) {
             ((RRQ)toReturn).setString(popString());
+            upDateValues();
             return toReturn;
         }
 
@@ -181,6 +182,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
 
         if (nextByte == 0) {
             ((WRQ)toReturn).setString(popString());
+            upDateValues();
             return toReturn;
         }
 
@@ -203,6 +205,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
 
         if (counter==12){
             ((ACK)toReturn).setBlockNumber(bytesToShort(start));
+            upDateValues();
             return toReturn;
         }
 
@@ -230,6 +233,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         if (counter>12) {
             if (nextByte == 0) {
                 ((ERROR) toReturn).setErrMsg(popString());
+                upDateValues();
                 return toReturn;
             }
 
@@ -248,6 +252,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
 
         if (nextByte == 0) {
             ((LOGRQ)toReturn).setString(popString());
+            upDateValues();
             return toReturn;
         }
 
@@ -263,6 +268,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
 
         if (nextByte == 0) {
             ((DELRQ)toReturn).setString(popString());
+            upDateValues();
             return toReturn;
         }
 
@@ -280,6 +286,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         else {
             if (nextByte == 0) {
                 ((BCAST) toReturn).setFileName(popString());
+                upDateValues();
                 return toReturn;
             }
 
@@ -339,5 +346,13 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         return ans;
     }
 
+    private void upDateValues(){
+        counter=0;
+        opcode=-1;
+        isStarted=false;
+        byte[] bytes = new byte[1 << 10]; //start with 1k
+        len = 0;
+        loaded.set(0);
+    }
 }
 
