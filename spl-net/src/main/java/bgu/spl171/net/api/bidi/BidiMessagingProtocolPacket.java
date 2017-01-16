@@ -28,6 +28,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     private long CounterSend=0;
 
 
+
     public void start(int connectionId, Connections<Packet> connections){
         this.connections =connections ;
         this.connectionId=connectionId;
@@ -58,7 +59,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                 }
             }
             else{
-                broadcast(new BCAST((byte)0, msg.getString()));
+                broadcast(new BCAST((byte)0,msg.getString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -189,7 +190,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                 }
             }
             else {
-                try {
+                try{
                     Files.write(path,currentData, StandardOpenOption.APPEND);
                     connections.send(connectionId, new ACK(msg.getBlockNumber()));
                 } catch (IOException e) {
@@ -206,7 +207,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                     e.printStackTrace();
                     return;
                 }
-                broadcast(new BCAST((byte)1, fileName));
+                broadcast(new BCAST((byte)1, fileName)); //TODO: what does this send?
                 path=null;
             }
         }
@@ -221,13 +222,9 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
         }
     }
 
-
-
-    public void execute(ERROR msg) {//In this case, we want to SEND an error to the client
-        connections.send(connectionId, msg);
+    public void execute(ERROR msg){
+        connections.send(connectionId,msg);
     }
 
-    public void execute(BCAST msg) {//NOTHING
-    }
 
 }
