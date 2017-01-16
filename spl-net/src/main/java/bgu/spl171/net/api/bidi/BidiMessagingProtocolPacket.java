@@ -28,7 +28,6 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     private long CounterSend=0;
 
 
-
     public void start(int connectionId, Connections<Packet> connections){
         this.connections =connections ;
         this.connectionId=connectionId;
