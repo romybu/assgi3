@@ -143,7 +143,6 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     }
 
     private void hadleWithReading(){
-
         if (data.length- CounterSend< 512) {
             byte [] currentSend=new byte[data.length- (int)CounterSend];
             for(int i=0; i<currentSend.length; i++){
