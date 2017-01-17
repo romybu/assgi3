@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.util.function.Supplier;
 
 public abstract class BaseServer<T> implements Server<T> {
-//ADD CONNECTIONS
     private final int port;
     private final Supplier<BidiMessagingProtocol<T>> protocolFactory;
     private final Supplier<MessageEncoderDecoder<T>> encdecFactory;
@@ -62,9 +61,6 @@ public abstract class BaseServer<T> implements Server<T> {
 			sock.close();
     }
 
-    protected void execute(BlockingConnectionHandler<T>  handler){
-        Thread t=new Thread(handler);
-        t.start();
-    }
+    protected abstract void execute(BlockingConnectionHandler<T>  handler);
 
 }
