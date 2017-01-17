@@ -226,5 +226,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
         connections.send(connectionId,msg);
     }
 
-
+    public void execute(BCAST msg){ // TODO
+        return;
+    }
 }
