@@ -13,6 +13,9 @@ public abstract class PacketsWithString implements Packet {
         string="";
         lastByte=0;
     }
+
+
+
     public String getString() {
         return string;
     }

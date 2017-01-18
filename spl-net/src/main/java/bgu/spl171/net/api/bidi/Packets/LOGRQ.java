@@ -12,6 +12,7 @@ public class LOGRQ extends PacketsWithString { //TODO: MAYBE WE SHOULD KNOW THE 
         super();
         opcode=7;
     }
+
     public short getOpcode() {
         return opcode;
     }

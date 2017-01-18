@@ -22,12 +22,26 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     private int connectionId;
     private boolean shouldTerminate = false;
     private ConcurrentHashMap< Integer,String> allUsers;
-    private String fileName;
+
+
+    public String fileName;
+
+
     private Path path;
     private byte[] data;
     private short counterOfBlocks=0;
     private long CounterSend=0;
+    /****for the test***/
+    public boolean connectionState;
 
+
+    /************ for the protocol test ************/
+
+    public ConcurrentHashMap<Integer, String> getLoggedInUsers(){
+        return allUsers;
+    }
+
+    /**********************************************/
 
     public BidiMessagingProtocolPacket(ConcurrentHashMap< Integer,String> allUsers){
         this.allUsers=allUsers;
