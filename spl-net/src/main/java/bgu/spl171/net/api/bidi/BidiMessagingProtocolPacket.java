@@ -81,6 +81,12 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
         if(logedIN) {
             File folder = new File("Files/ReadyFiles");
             String[] allFiles = folder.list();
+            String stemp="";
+            for(int j=0; j<allFiles.length; j++){
+                stemp=allFiles[j];
+                stemp=stemp+"\0";
+                allFiles[j]=stemp;
+            }
             data = new byte[allFiles.length];
             int i = 0;
             while (i < data.length) {
@@ -273,16 +279,14 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
 
 //TODO: what to do we this situation
     public void execute(ERROR msg) {
-        if (logedIN) {
-            if (msg.getErrorCode() == 4) {
-                boolean isSent = connections.send(connectionId, msg);
-                if (!isSent) {
-                    connections.send(connectionId, new ERROR((short) 0, "the Msg did'nt send"));
-                    return;
-                }
+        if (msg.getErrorCode() == 4) {
+            boolean isSent = connections.send(connectionId, msg);
+            if (!isSent) {
+                connections.send(connectionId, new ERROR((short) 0, "the Msg did'nt send"));
+                return;
             }
         }
-        else{
+        if(!logedIN){
             connections.send(connectionId, new ERROR((short) 6, "User not logged in"));
         }
     }
