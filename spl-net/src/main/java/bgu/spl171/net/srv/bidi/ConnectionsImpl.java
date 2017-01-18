@@ -18,9 +18,11 @@ public class ConnectionsImpl<T> implements Connections<T> {
     public AtomicInteger numOfConnections=new AtomicInteger();
 
     public boolean send(int connectionId, T msg) {
+        System.out.println("im in sending connections");
         ConnectionHandler<T> c = allConnections.get(connectionId);
         if (c != null) {
             c.send(msg);
+            System.out.println("i did c.send");
             return true;
         }
         return false;
@@ -33,7 +35,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
         }
     }
 
-    public void disconnect(int connectionId){
+    public synchronized void disconnect(int connectionId){
         try {
             allConnections.remove(connectionId).close();
         } catch (IOException e) {
@@ -41,7 +43,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
         }
     }
 
-    public void addToConnections(ConnectionHandler<T> connectionHandler){
+    public synchronized void addToConnections(ConnectionHandler<T> connectionHandler){
         allConnections.put(numOfConnections.get(), connectionHandler);
         numOfConnections.incrementAndGet();
     }
