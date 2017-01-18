@@ -49,7 +49,6 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
     }
 
     @Override
@@ -69,6 +68,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
                 System.out.println("finished");
             }
         } catch (IOException ex) {
+            System.out.println("im in sending conectionHandler error");
             ex.printStackTrace();
         }
     }
