@@ -286,6 +286,15 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                 return;
             }
         }
+        if(msg.getErrorCode()==8){
+            fileName=null;
+            path=null;
+            data=null;
+            counterOfBlocks=0;
+            CounterSend=0;
+            logedIN=false;
+            numOfBlocksInData=0;
+        }
         if(!logedIN){
             connections.send(connectionId, new ERROR((short) 6, "User not logged in"));
         }
