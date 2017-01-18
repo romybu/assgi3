@@ -22,7 +22,7 @@ public class TFTPServer {
         ConcurrentHashMap< Integer,String> shared = new ConcurrentHashMap<>();
 
         Server reactor = Server.reactor(
-                10,
+                4,
                 7777,
                 () -> new BidiMessagingProtocolPacket(shared),
                 MessageEncoderDecoderImp::new,
