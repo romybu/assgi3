@@ -42,7 +42,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
     }
 
     public void addToConnections(ConnectionHandler<T> connectionHandler){
-        allConnections.put(numOfConnections.incrementAndGet(), connectionHandler);
-
+        allConnections.put(numOfConnections.get(), connectionHandler);
+        numOfConnections.incrementAndGet();
     }
 }

@@ -13,23 +13,25 @@ import java.net.Socket;
 
 public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler<T> {
 
-    private final BidiMessagingProtocol<T> protocol;
+    public final BidiMessagingProtocol<T> protocol;
     private final MessageEncoderDecoder<T> encdec;
     private final Socket sock;
     private BufferedInputStream in;
     private BufferedOutputStream out;
     private volatile boolean connected = true;
     private BaseServer server;
+    private int connectionId;
 
-    public BlockingConnectionHandler(Socket sock, MessageEncoderDecoder<T> reader, BidiMessagingProtocol<T> protocol) {
+    public BlockingConnectionHandler(Socket sock, MessageEncoderDecoder<T> reader, BidiMessagingProtocol<T> protocol, int connectionId) {
         this.sock = sock;
         this.encdec = reader;
         this.protocol = protocol;
+        this.connectionId=connectionId;
     }
 
     @Override
     public void run() {
-
+        //protocol.start(connectionId,server.connections);
         try (Socket sock = this.sock) { //just for automatic closing
             int read;
 

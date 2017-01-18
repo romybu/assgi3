@@ -20,15 +20,15 @@ public class TFTPServer {
 
     public static void main(String[] args) {
         ConcurrentHashMap< Integer,String> shared = new ConcurrentHashMap<>();
-
-        Server reactor = Server.reactor(
-                4,
-                7777,
-                () -> new BidiMessagingProtocolPacket(shared),
-                MessageEncoderDecoderImp::new,
-                new ConnectionsImpl<>());
-
-        reactor.serve();
+//
+//        Server reactor = Server.reactor(
+//                4,
+//                7777,
+//                () -> new BidiMessagingProtocolPacket(shared),
+//                MessageEncoderDecoderImp::new,
+//                new ConnectionsImpl<>());
+//
+//        reactor.serve();
 
         Server tcp = Server.threadPerClient(
                 7777,
