@@ -310,7 +310,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
         }
     }
 
-//    public void execute(BCAST msg){ // TODO
-//        return;
-//    }
+    public void execute(BCAST msg){
+        return;
+    }
 }
