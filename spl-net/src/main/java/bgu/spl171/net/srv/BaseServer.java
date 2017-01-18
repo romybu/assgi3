@@ -62,8 +62,8 @@ public abstract class BaseServer<T> implements Server<T> {
 			sock.close();
     }
 
-    protected void execute(BlockingConnectionHandler<T>  handler) {
-        handler.protocol.start(connections.numOfConnections.get(), connections);
-        new Thread(handler).start();
-    }
+    protected abstract void execute(BlockingConnectionHandler<T>  handler);
+//        handler.protocol.start(connections.numOfConnections.get(), connections);
+//        new Thread(handler).start();
+
 }
