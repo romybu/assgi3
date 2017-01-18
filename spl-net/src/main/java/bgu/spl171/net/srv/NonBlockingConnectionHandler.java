@@ -3,6 +3,7 @@ package bgu.spl171.net.srv;
 import bgu.spl171.net.api.MessageEncoderDecoder;
 import bgu.spl171.net.api.MessagingProtocol;
 import bgu.spl171.net.api.bidi.BidiMessagingProtocol;
+import bgu.spl171.net.api.bidi.Connections;
 import bgu.spl171.net.srv.Reactor;
 import bgu.spl171.net.srv.bidi.ConnectionHandler;
 
@@ -14,9 +15,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReadWriteLock;
 
-/**
- * Created by alonam on 1/12/17.
- */
+
 public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T>{
     private static final int BUFFER_ALLOCATION_SIZE = 1 << 13; //8k
     private static final ConcurrentLinkedQueue<ByteBuffer> BUFFER_POOL = new ConcurrentLinkedQueue<>();
@@ -27,7 +26,6 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T>{
     private final SocketChannel chan;
     private final Reactor reactor;
     private ReadWriteLock wrLock;
-
 
 
     public NonBlockingConnectionHandler(
@@ -133,6 +131,6 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T>{
     }
 
     public void start() {
-        //protocol.start()
+        protocol.start((reactor.getConnections()).numOfConnections.get(),reactor.getConnections());
     }
 }

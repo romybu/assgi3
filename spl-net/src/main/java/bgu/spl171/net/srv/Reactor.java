@@ -23,7 +23,7 @@ public class Reactor<T> implements Server<T> {
     private final Supplier<MessageEncoderDecoder<T>> readerFactory;
     private final ActorThreadPool pool;
     private Selector selector;
-    private Connections<T> connections;
+    private ConnectionsImpl<T> connections;
     private Thread selectorThread;
     private final ConcurrentLinkedQueue<Runnable> selectorTasks = new ConcurrentLinkedQueue<>();
 
@@ -31,22 +31,23 @@ public class Reactor<T> implements Server<T> {
             int numThreads,
             int port,
             Supplier<BidiMessagingProtocol<T>> protocolFactory,
-            Supplier<MessageEncoderDecoder<T>> readerFactory) {
+            Supplier<MessageEncoderDecoder<T>> readerFactory,
+            ConnectionsImpl<T> connections) {
 
         this.pool = new ActorThreadPool(numThreads);
         this.port = port;
         this.protocolFactory = protocolFactory;
         this.readerFactory = readerFactory;
-        this.connections=new ConnectionsImpl<T>();
+        this.connections= connections;
     }
 
     @Override
     public void serve() {
+        selectorThread=Thread.currentThread();
 
         try (Selector selector = Selector.open();
                 ServerSocketChannel serverSock = ServerSocketChannel.open()) {
 
-            selectorThread=Thread.currentThread();
             this.selector = selector; //just to be able to close
 
             serverSock.bind(new InetSocketAddress(port));
@@ -104,8 +105,8 @@ public class Reactor<T> implements Server<T> {
                 protocolFactory.get(),
                 clientChan,
                 this);
-
-        pool.submit(handler, () -> handler.start());
+        connections.addToConnections(handler);
+        pool.submit(handler, () -> handler.start()); //WHYYYYYYYYYYWHWYYYYYWHYYYYYYYYYYYYY
         clientChan.register(selector, SelectionKey.OP_READ, handler);
     }
 
@@ -116,9 +117,10 @@ public class Reactor<T> implements Server<T> {
             if (task != null) {
                 pool.submit(handler, task);
             }
-        } if (key.isWritable())
+        } if (key.isValid() && key.isWritable()) {
             handler.continueWrite();
 
+        }
     }
 
     private void runSelectionThreadTasks() {
@@ -130,6 +132,10 @@ public class Reactor<T> implements Server<T> {
     @Override
     public void close() throws IOException {
         selector.close();
+    }
+
+    public ConnectionsImpl<T> getConnections(){
+        return connections;
     }
 
 }

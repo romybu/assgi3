@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
+import java.text.Bidi;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,15 +21,33 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     private Connections<Packet> connections;
     private int connectionId;
     private boolean shouldTerminate = false;
-    private ConcurrentHashMap< Integer,String> allUsers=new ConcurrentHashMap<>();
-    private String fileName;
+    private ConcurrentHashMap< Integer,String> allUsers;
+
+
+    public String fileName;
+
+
     private Path path;
     private byte[] data;
     private short counterOfBlocks=0;
     private long CounterSend=0;
     private boolean logedIN=false;
     private int numOfBlocksInData=0;
+    /****for the test***/
+    public boolean connectionState;
 
+
+    /************ for the protocol test ************/
+
+    public ConcurrentHashMap<Integer, String> getLoggedInUsers(){
+        return allUsers;
+    }
+
+    /**********************************************/
+
+    public BidiMessagingProtocolPacket(ConcurrentHashMap< Integer,String> allUsers){
+        this.allUsers=allUsers;
+    }
 
     public void start(int connectionId, Connections<Packet> connections){
         this.connections =connections ;
@@ -300,4 +319,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
         }
     }
 
+    public void execute(BCAST msg){
+        return;
+    }
 }
