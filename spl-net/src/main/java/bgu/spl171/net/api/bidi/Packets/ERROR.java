@@ -2,9 +2,7 @@ package bgu.spl171.net.api.bidi.Packets;
 
 import bgu.spl171.net.api.bidi.BidiMessagingProtocolPacket;
 
-/**
- * Created by alonam on 1/11/17.
- */
+
 public class ERROR implements Packet {
     private short opcode;
     private short errorCode;

@@ -253,6 +253,8 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                     path = null;
                     numOfBlocksInData=0;
                 }
+                broadcast(new BCAST((byte)1, fileName));
+                path=null;
             }
         }
         else{

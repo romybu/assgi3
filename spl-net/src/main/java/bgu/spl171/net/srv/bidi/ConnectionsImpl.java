@@ -17,7 +17,6 @@ public class ConnectionsImpl<T> implements Connections<T> {
     private ConcurrentHashMap<Integer, ConnectionHandler<T>> allConnections=new ConcurrentHashMap<>();
     private AtomicInteger numOfConnections=new AtomicInteger();
 
-
     public boolean send(int connectionId, T msg) {
         ConnectionHandler<T> c = allConnections.get(connectionId);
         if (c != null) {
