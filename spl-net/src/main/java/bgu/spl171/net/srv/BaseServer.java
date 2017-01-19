@@ -10,7 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.function.Supplier;
 
-public abstract class BaseServer<T> implements Server<T> {
+public class BaseServer<T> implements Server<T> {
     private final int port;
     private final Supplier<BidiMessagingProtocol<T>> protocolFactory;
     private final Supplier<MessageEncoderDecoder<T>> encdecFactory;
@@ -34,19 +34,20 @@ public abstract class BaseServer<T> implements Server<T> {
     public void serve() {
 
         try (ServerSocket serverSock = new ServerSocket(port)) {
-
+            System.out.println("try to connect from server");
             this.sock = serverSock; //just to be able to close
 
             while (!Thread.currentThread().isInterrupted()) {
-            System.out.println("try to connect from client");
+
                 Socket clientSock = serverSock.accept();
 
                 BlockingConnectionHandler<T> handler = new BlockingConnectionHandler<T>(
                         clientSock,
                         encdecFactory.get(),
-                        protocolFactory.get());
+                        protocolFactory.get(),
+                        connections.numOfConnections.get());
 
-
+                connections.addToConnections(handler);
                 execute(handler);
             }
         } catch (IOException ex) {
@@ -61,8 +62,8 @@ public abstract class BaseServer<T> implements Server<T> {
 			sock.close();
     }
 
-    protected void execute(BlockingConnectionHandler<T>  handler){
+    protected void execute(BlockingConnectionHandler<T>  handler) {
+        handler.protocol.start(connections.numOfConnections.get()-1, connections);
         new Thread(handler).start();
     }
-
 }

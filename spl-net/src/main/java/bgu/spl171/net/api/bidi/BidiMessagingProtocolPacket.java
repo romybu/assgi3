@@ -138,7 +138,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     }
 
     public void execute(LOGRQ msg) {
-        System.out.println("im trying to log in");
+        System.out.println("I'm in Protocol");
         String name=msg.getString();
         boolean isFound=allUsers.containsKey(name);
         if(!isFound){
@@ -305,6 +305,15 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                 connections.send(connectionId, new ERROR((short) 0, "the Msg did'nt send"));
                 return;
             }
+        }
+        if(msg.getErrorCode()==8){
+            fileName=null;
+            path=null;
+            data=null;
+            counterOfBlocks=0;
+            CounterSend=0;
+            logedIN=false;
+            numOfBlocksInData=0;
         }
         if(!logedIN){
             connections.send(connectionId, new ERROR((short) 6, "User not logged in"));

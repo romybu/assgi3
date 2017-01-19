@@ -20,6 +20,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
 
 
     public Packet decodeNextByte(byte nextByte){
+        System.out.println("I'm in decoder");
         if(counter<2){
             start[counter]=nextByte;
             counter++;
@@ -245,12 +246,14 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     }
 
     private Packet buildLOGRQ(byte nextByte){
+        System.out.println("IM in logger");
         if (!isStarted) {
             toReturn = new LOGRQ();
             isStarted=true;
         }
 
         if (nextByte == 0) {
+            System.out.println("IM return");
             ((LOGRQ)toReturn).setString(popString());
             upDateValues();
             return toReturn;
