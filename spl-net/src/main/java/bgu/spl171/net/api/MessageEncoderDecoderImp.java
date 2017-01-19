@@ -164,7 +164,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
             isStarted=true;
         }
 
-        if (nextByte == 0) {
+        if (nextByte == 0 || nextByte == '0') {
             ((RRQ)toReturn).setString(popString());
             upDateValues();
             return toReturn;
@@ -181,7 +181,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
             isStarted=true;
         }
 
-        if (nextByte == 0) {
+        if (nextByte == 0 || nextByte == '0') {
             ((WRQ)toReturn).setString(popString());
             upDateValues();
             return toReturn;
@@ -232,7 +232,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         }
 
         if (counter>12) {
-            if (nextByte == 0) {
+            if (nextByte == 0 || nextByte == '0') {
                 ((ERROR) toReturn).setErrMsg(popString());
                 upDateValues();
                 return toReturn;
@@ -252,7 +252,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
             isStarted=true;
         }
 
-        if (nextByte == 0) {
+        if (nextByte == 0 || nextByte == '0') {
             System.out.println("IM return");
             ((LOGRQ)toReturn).setString(popString());
             upDateValues();
@@ -269,7 +269,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
             isStarted=true;
         }
 
-        if (nextByte == 0) {
+        if (nextByte == 0 || nextByte == '0') {
             ((DELRQ)toReturn).setString(popString());
             upDateValues();
             return toReturn;
@@ -287,7 +287,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         }
 
         else {
-            if (nextByte == 0) {
+            if (nextByte == 0 || nextByte == '0') {
                 ((BCAST) toReturn).setFileName(popString());
                 upDateValues();
                 return toReturn;
