@@ -15,6 +15,8 @@ import java.text.Bidi;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created by romybu on 11/01/17.
@@ -24,7 +26,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     private int connectionId;
     private boolean shouldTerminate = false;
     private ConcurrentHashMap< Integer,String> allUsers;
-
+    private final ReadWriteLock lockTheFile=new ReentrantReadWriteLock();
 
     public String fileName;
 
@@ -103,21 +105,31 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
             File folder = new File("Files/ReadyFiles");
             String[] allFiles = folder.list();
             String stemp="";
-            for(int j=0; j<allFiles.length; j++){
-                stemp=allFiles[j];
-                stemp=stemp+"\0";
-                allFiles[j]=stemp;
-            }
-            data = new byte[allFiles.length];
-            int i = 0;
-            while (i < data.length) {
-                byte[] temp = allFiles[i].getBytes();
-                for (int j = 0; j < temp.length & i < data.length; j++) {
-                    data[i] = temp[j];
-                    i++;
+            if (allFiles!=null) {
+                for (int j = 0; j < allFiles.length; j++) {
+                    stemp = allFiles[j];
+                    stemp = stemp + "\0";
+                    allFiles[j] = stemp;
+                }
+
+                data = new byte[allFiles.length];
+                int i = 0;
+                while (i < data.length) {
+                    byte[] temp = allFiles[i].getBytes();
+                    for (int j = 0; j < temp.length & i < data.length; j++) {
+                        data[i] = temp[j];
+                        i++;
+                    }
                 }
             }
-            hadleWithReading();
+            else{
+                data=new byte[0];
+                connections.send(connectionId, new DATA((short)0,data, (short)1));
+            }
+                hadleWithReading();
+
+            ///TODO: what happend with this
+
         }
         else{
             connections.send(connectionId, new ERROR((short) 6, "User not logged in"));
@@ -162,18 +174,22 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
 
     public void execute(WRQ msg) {
         if(logedIN) {
-            fileName = msg.getString();
-            boolean isExists = Files.exists(Paths.get("Files", "ReadyFiles", fileName));
-            if (isExists) {
-                boolean isSent = connections.send(connectionId, new ERROR((short) 5, "File already exists - File name exists on WRQ"));
-                return;
-            }
+            try{
+                fileName = msg.getString();
+                lockTheFile.writeLock().lock();
+                if(!(Files.exists(Paths.get("Files", "ReadyFiles", fileName)))){
+                    System.out.println("trying to create file");
+                    path = Paths.get("Files", "InProcessFiles", fileName);
+                    Files.createFile(path);
+                }
+                else{
+                    System.out.println("didn't create for some reason");
 
-            path = Paths.get("Files", "InProcessFiles", fileName);
-            System.out.println(path);
-            try {
-                Files.createFile(path);
-            } catch (FileAlreadyExistsException e) {
+                    connections.send(connectionId, new ERROR((short) 5, "File already exists - File name exists on WRQ"));
+                }
+                lockTheFile.writeLock().unlock();
+            }
+            catch (FileAlreadyExistsException e) {
                 boolean isSent = connections.send(connectionId, new ERROR((short) 5, "File already exists - File name exists on WRQ"));
                 if (!isSent) {
                     e.printStackTrace();
@@ -190,10 +206,12 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     }
 
     public void execute(RRQ msg) {
+        System.out.println(msg.getString());
         if (logedIN) {
-            String uploadFile = msg.getString();
-            Path temp = Paths.get("Files", "ReadyFiles", uploadFile);
-            boolean inReadyFiles = Files.exists(temp);
+            Path temp = Paths.get("Files", "ReadyFiles", msg.getString());
+
+            boolean inReadyFiles = exists("ReadyFiles", msg.getString());
+            System.out.println("i'm p"+ inReadyFiles);
             if (!inReadyFiles) {
                 boolean isSent = connections.send(connectionId, new ERROR((short) 1, "File not found – RRQ of non-existing file"));
                 if (!isSent) {
@@ -328,5 +346,19 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
 
     public void execute(BCAST msg){
         return;
+    }
+
+
+
+    private boolean exists(String folder, String file){
+        File folders=new File("Files", folder);
+        boolean ans=false;
+        for(String f : folders.list()){
+            if(f.equals(file)){
+                ans=true;
+                break;
+            }
+        }
+        return ans;
     }
 }
