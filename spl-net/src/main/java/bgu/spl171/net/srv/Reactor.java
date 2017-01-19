@@ -106,7 +106,7 @@ public class Reactor<T> implements Server<T> {
                 clientChan,
                 this);
         connections.addToConnections(handler);
-        pool.submit(handler, () -> handler.start()); //WHYYYYYYYYYYWHWYYYYYWHYYYYYYYYYYYYY
+        pool.submit(handler, () -> handler.start());
         clientChan.register(selector, SelectionKey.OP_READ, handler);
     }
 

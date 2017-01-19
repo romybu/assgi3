@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class ConnectionsImpl<T> implements Connections<T> {
     private ConcurrentHashMap<Integer, ConnectionHandler<T>> allConnections=new ConcurrentHashMap<>();
-    public AtomicInteger numOfConnections=new AtomicInteger();
+    public AtomicInteger numOfConnections=new AtomicInteger(0);
 
     public boolean send(int connectionId, T msg) {
         ConnectionHandler<T> c = allConnections.get(connectionId);
@@ -42,7 +42,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
     }
 
     public void addToConnections(ConnectionHandler<T> connectionHandler){
-        allConnections.put(numOfConnections.incrementAndGet(), connectionHandler);
-
+        allConnections.put(numOfConnections.get(), connectionHandler);
+        numOfConnections.incrementAndGet();
     }
 }

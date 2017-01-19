@@ -20,19 +20,22 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     private BufferedOutputStream out;
     private volatile boolean connected = true;
     private BaseServer server;
+//    private int connectionId;
 
     public BlockingConnectionHandler(Socket sock, MessageEncoderDecoder<T> reader, BidiMessagingProtocol<T> protocol) {
         this.sock = sock;
         this.encdec = reader;
         this.protocol = protocol;
+//        this.connectionId=connectionId;
     }
 
     @Override
     public void run() {
-
+        protocol.start(server.connections.numOfConnections.get(), server.connections);
+        server.connections.addToConnections(this);
         try (Socket sock = this.sock) { //just for automatic closing
-            int read;
 
+            int read;
             in = new BufferedInputStream(sock.getInputStream());
 
             while (!protocol.shouldTerminate() && connected && (read = in.read()) >= 0) {

@@ -138,6 +138,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     }
 
     public void execute(LOGRQ msg) {
+        System.out.println("im trying to log in");
         String name=msg.getString();
         boolean isFound=allUsers.containsKey(name);
         if(!isFound){
