@@ -59,7 +59,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
 
     public void send(T msg) {
         System.out.println("im in sending conectionHandler");
-        try (Socket sock = this.sock) {
+        try  {
             out = new BufferedOutputStream(sock.getOutputStream());
             if (msg != null) {
                 System.out.println("start");
