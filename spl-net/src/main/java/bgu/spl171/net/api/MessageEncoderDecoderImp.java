@@ -20,7 +20,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
 
 
     public Packet decodeNextByte(byte nextByte){
-        System.out.println("I'm in decoder");
+        System.out.println("I'm in decoder: " + (int)nextByte);
         if(counter<2){
             start[counter]=nextByte;
             counter++;

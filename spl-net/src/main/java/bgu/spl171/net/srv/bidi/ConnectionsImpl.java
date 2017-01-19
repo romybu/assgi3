@@ -25,9 +25,17 @@ public class ConnectionsImpl<T> implements Connections<T> {
         System.out.println("im in sending connections");
         System.out.println(connectionId);
         printHash();
-        ConnectionHandler<T> c = allConnections.get(connectionId);
-        System.out.println(c.toString());
-        if (c != null) {
+//        ConnectionHandler<T> c = allConnections.get(connectionId);
+//        System.out.println(c.toString());
+//        if (c != null) {
+//            c.send(msg);
+//            System.out.println("i did c.send");
+//            return true;
+//        }
+//        return false;
+
+        if (allConnections.containsKey(connectionId)){
+            ConnectionHandler<T> c = allConnections.get(connectionId);
             c.send(msg);
             System.out.println("i did c.send");
             return true;
