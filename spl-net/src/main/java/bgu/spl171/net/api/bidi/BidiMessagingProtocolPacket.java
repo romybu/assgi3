@@ -6,6 +6,8 @@ import bgu.spl171.net.srv.bidi.ConnectionsImpl;
 
 import javax.imageio.IIOException;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
@@ -140,7 +142,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
     public void execute(LOGRQ msg) {
         System.out.println("I'm in Protocol");
         String name=msg.getString();
-        boolean isFound=allUsers.containsKey(name);
+        boolean isFound=allUsers.containsValue(name);
         if(!isFound){
             allUsers.put(connectionId,name);
             boolean isSent=connections.send(connectionId, new ACK((short)0));
@@ -166,7 +168,9 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
                 boolean isSent = connections.send(connectionId, new ERROR((short) 5, "File already exists - File name exists on WRQ"));
                 return;
             }
+
             path = Paths.get("Files", "InProcessFiles", fileName);
+            System.out.println(path);
             try {
                 Files.createFile(path);
             } catch (FileAlreadyExistsException e) {
@@ -177,7 +181,9 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            connections.send(connectionId, new ACK((short)0));
         }
+
         else{
             connections.send(connectionId, new ERROR((short) 6, "User not logged in"));
         }

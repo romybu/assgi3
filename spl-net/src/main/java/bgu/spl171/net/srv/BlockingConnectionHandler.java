@@ -36,6 +36,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
             int read;
 
             in = new BufferedInputStream(sock.getInputStream());
+            out = new BufferedOutputStream(sock.getOutputStream());
 
             while (!protocol.shouldTerminate() && connected && (read = in.read()) >= 0) {
                 T nextMessage = encdec.decodeNextByte((byte) read);
@@ -59,8 +60,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
 
     public void send(T msg) {
         System.out.println("im in sending conectionHandler");
-        try  {
-            out = new BufferedOutputStream(sock.getOutputStream());
+        try {
             if (msg != null) {
                 System.out.println("start");
                 out.write(encdec.encode(msg));
