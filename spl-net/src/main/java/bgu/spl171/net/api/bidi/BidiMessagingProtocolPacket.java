@@ -108,23 +108,10 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
             String stemp="";
             if (allFiles!=null) {
                 for (int j = 0; j < allFiles.length; j++) {
-                    stemp+=allFiles[j]+'3';
-                    /*      stemp = allFiles[j];
-                    System.out.println(stemp);
-                    stemp = stemp + "\0";
-                    System.out.println(stemp);
-                    allFiles[j] = stemp;*/
+                    stemp+=allFiles[j]+'0';
                 }
                 data=stemp.getBytes();
                 System.out.println(stemp);
-                /*int i = 0;
-                while (i < data.length) {
-                    byte[] temp = allFiles[i].getBytes();
-                    for (int j = 0; j < temp.length & i < data.length; j++) {
-                        data[i] = temp[j];
-                        i++;
-                    }
-                }*/
                 hadleWithReading();
             }
             else{
@@ -215,7 +202,7 @@ public class BidiMessagingProtocolPacket implements BidiMessagingProtocol<Packet
         System.out.println("i'm in rrq execute");
         System.out.println(msg.getString());
         if (logedIN) {
-            path=Paths.get(System.getProperty("user.home"),"Desktop","asssssss","assgi3","spl-net","Files", "ReadyFiles", msg.getString());
+            path=Paths.get(System.getProperty("user.home"),"Desktop","asssssss","assgi3","Files", "ReadyFiles", msg.getString());
             //path = FileSystems.getDefault().getPath("Files", "ReadyFiles", msg.getString());
             //path = Paths.get("Home","Desktop","asssssss","assgi3","spl-net","Files", "ReadyFiles", msg.getString());
             System.out.println(path);
