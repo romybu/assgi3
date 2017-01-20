@@ -159,6 +159,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     }
 
     private Packet buildRRQ(byte nextByte) {
+        System.out.println("IM in RRQ");
         if (!isStarted) {
             toReturn = new RRQ();
             isStarted=true;
@@ -207,9 +208,9 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         if (counter==12){
             ((ACK)toReturn).setBlockNumber(bytesToShort(start));
             upDateValues();
+            System.out.println("im return ack");
             return toReturn;
         }
-
         return null;
 
     }

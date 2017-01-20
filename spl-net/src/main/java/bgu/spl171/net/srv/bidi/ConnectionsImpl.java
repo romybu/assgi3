@@ -2,6 +2,7 @@ package bgu.spl171.net.srv.bidi;
 
 import bgu.spl171.net.api.MessagingProtocol;
 import bgu.spl171.net.api.bidi.Connections;
+import bgu.spl171.net.api.bidi.Packets.DATA;
 import bgu.spl171.net.api.bidi.Packets.Packet;
 import bgu.spl171.net.srv.*;
 
@@ -22,6 +23,10 @@ public class ConnectionsImpl<T> implements Connections<T> {
         numOfConnections=new AtomicInteger(0);
     }
     public boolean send(int connectionId, T msg) {
+        if(((Packet)msg).getOpcode()==3){
+            System.out.println(((DATA)msg).getPacketSize());
+        }
+
         System.out.println("im in sending connections");
         System.out.println(connectionId);
         printHash();
