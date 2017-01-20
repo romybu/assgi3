@@ -28,6 +28,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
         if (counter==2){
             opcode=bytesToShort(start);
             counter++;
+            System.out.println(" im in decode and the opcode is: "+ opcode);
             if (opcode==6)
                 return new DIRO();
             else if (opcode==10)
@@ -121,6 +122,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     }
 
     private Packet buildDATA(byte nextByte) {
+        System.out.println("im in buildata");
         if (!isStarted) {
             toReturn = new DATA();
             isStarted=true;
@@ -177,6 +179,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     }
 
     private Packet buildWRQ(byte nextByte) {
+        System.out.println("im in buildWRQ");
         if (!isStarted) {
             toReturn = new WRQ();
             isStarted=true;
@@ -194,6 +197,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     }
 
     private Packet buildACK(byte nextByte){
+        System.out.println("im in buildack");
         if (!isStarted) {
             toReturn = new ACK();
             isStarted=true;
@@ -216,6 +220,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     }
 
     private Packet buildERROR(byte nextByte){
+        System.out.println("im in builderrrorrrr");
         if (!isStarted) {
             toReturn = new ERROR();
             isStarted=true;
@@ -265,6 +270,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     }
 
     private Packet buildDELRQ(byte nextByte){
+        System.out.println("IM IN BUILDDERQ");
         if (!isStarted) {
             toReturn = new DELRQ();
             isStarted=true;
@@ -281,6 +287,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
     }
 
     private Packet buildBCAST(byte nextByte){
+        System.out.printf("im in buildcast");
         if (!isStarted) {
             toReturn = new BCAST();
             isStarted=true;
@@ -347,6 +354,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Packet> {
             ans[i] = tmp2[j];
             i++;
         }
+        System.out.println(ans.length);
         return ans;
     }
 
